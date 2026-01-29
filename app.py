@@ -11,8 +11,12 @@ logging.basicConfig(
 
 # FUNCTIONS 
 def read_ips(filename):
+    ips = []
     with open(filename, "r") as f:
-        return [line.strip() for line in f.readlines()]
+        for line in f:
+            cleaned = line.strip()
+            ips.append(cleaned)
+    return ips
 
 def get_ip_details(ip):
     url = f"https://ipinfo.io/{ip}/geo"
@@ -31,9 +35,16 @@ def get_ip_details(ip):
         return None
 
 def extract_city(data):
-    if data and "city" in data:
+    if data is None:
+        return "Unknown"
+    if "city" in data:
         return data["city"]
-    return "Unknown"
+    else:
+        return "Unknown"
+def test_extract_city():
+    assert extract_city({"city": "Seoul"}) == "Seoul"
+    assert extract_city({}) == "Unknown"
+    assert extract_city(None) == "Unknown"
 
 def save_to_csv(results, filename):
     with open(filename, "w", newline="") as f:
@@ -57,4 +68,4 @@ def main():
     print("✅ Data saved to ip_city.csv")
 
 if __name__ == "__main__":
-    main()
+    test_extract_city()
