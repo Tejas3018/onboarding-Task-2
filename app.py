@@ -15,7 +15,8 @@ def read_ips(filename):
     with open(filename, "r") as f:
         for line in f:
             cleaned = line.strip()
-            ips.append(cleaned)
+            if cleaned:
+                ips.append(cleaned)
     return ips
 
 def get_ip_details(ip):
@@ -47,7 +48,7 @@ def test_extract_city():
     assert extract_city(None) == "Unknown"
 
 def save_to_csv(results, filename):
-    with open(filename, "w", newline="") as f:
+    with open(filename, "w", newline="", encoding="utf-8-sig") as f:
         writer = csv.writer(f)
         writer.writerow(["IP Address", "City"])
 
@@ -68,4 +69,4 @@ def main():
     print("✅ Data saved to ip_city.csv")
 
 if __name__ == "__main__":
-    test_extract_city()
+    main()
